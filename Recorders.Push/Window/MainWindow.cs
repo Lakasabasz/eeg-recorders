@@ -3,12 +3,12 @@ using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 
-namespace push;
+namespace Recorders.Push.Window;
 
 class MainWindow
 {
     private readonly RenderWindow _window;
-    private readonly Dictionary<Guid, Drawable> _drawables = new();
+    private readonly List<Drawable> _drawables = [];
     private readonly DisplayContextManager _manager;
     private TimeSpan _fpsTargetTime;
 
@@ -22,12 +22,8 @@ class MainWindow
 
     public Vector2u Size => _window.Size;
 
-    public Guid AddDrawable(Drawable drawable)
-    {
-        Guid objectId = Guid.NewGuid();
-        _drawables.Add(objectId, drawable);
-        return objectId;
-    }
+    public void AddDrawable(Drawable drawable) => _drawables.Add(drawable);
+    public void RemoveDrawable(Drawable drawable) => _drawables.Remove(drawable);
 
     public void Run()
     {
@@ -38,9 +34,9 @@ class MainWindow
         while (_window.IsOpen)
         {
             _window.DispatchEvents();
-            _manager.LoopTick(this, (float)contextStopwatch.Elapsed.TotalSeconds);
+            _manager.LoopTick((float)contextStopwatch.Elapsed.TotalSeconds);
             contextStopwatch.Restart();
-            foreach (var drawable in _drawables.Values) _window.Draw(drawable);
+            foreach (var drawable in _drawables) _window.Draw(drawable);
 
             _window.Display();
             var progress = fpsStopwatch.Elapsed;

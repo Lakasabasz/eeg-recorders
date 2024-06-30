@@ -1,6 +1,6 @@
 ﻿using SFML.Graphics;
 
-namespace Recorders.Push.Window;
+namespace Recorders.Push.EventHandlers;
 
 class MainWindowEventHandler
 {

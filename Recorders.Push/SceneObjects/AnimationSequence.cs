@@ -1,4 +1,5 @@
-﻿using Recorders.Push.Window;
+﻿using Recorders.Push.EventHandlers;
+using Recorders.Push.Window;
 using SFML.System;
 
 namespace Recorders.Push.SceneObjects;
@@ -20,10 +21,10 @@ class AnimationSequence: IAnimatable
     {
         _cubes = new()
         {
-            [Direction.Bottom] = new CubeAnimationSequence(window, new Vector2f(0, 1), false),
-            [Direction.Top] = new CubeAnimationSequence(window, new Vector2f(0, -1), false),
-            [Direction.Left] = new CubeAnimationSequence(window, new Vector2f(-1, 0), false),
-            [Direction.Right] = new CubeAnimationSequence(window, new Vector2f(1, 0), false)
+            [Direction.Bottom] = new CubeAnimationSequence(window, new Vector2f(0, 1), false, new CubeAnimationSequenceEventHandler(ApiClient.Instance, "push-bottom")),
+            [Direction.Top] = new CubeAnimationSequence(window, new Vector2f(0, -1), false, new CubeAnimationSequenceEventHandler(ApiClient.Instance, "push-top")),
+            [Direction.Left] = new CubeAnimationSequence(window, new Vector2f(-1, 0), false, new CubeAnimationSequenceEventHandler(ApiClient.Instance, "push-left")),
+            [Direction.Right] = new CubeAnimationSequence(window, new Vector2f(1, 0), false, new CubeAnimationSequenceEventHandler(ApiClient.Instance, "push-right"))
         };
         
         _current = _sequence.First();
@@ -49,4 +50,6 @@ class AnimationSequence: IAnimatable
     }
 
     public bool Done => _sequence.IndexOf(_current) == 3 && _cubes[_current].Done;
+    public event Action? Start;
+    public event Action? Finish;
 }

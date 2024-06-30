@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using Recorders.Push.SceneObjects;
+using Recorders.Push.SceneObjects.Primitives;
 using SFML.Graphics;
 using SFML.System;
 

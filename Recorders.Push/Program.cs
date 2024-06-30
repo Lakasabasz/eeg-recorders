@@ -1,4 +1,5 @@
-﻿using Recorders.Push.Window;
+﻿using Recorders.Push.EventHandlers;
+using Recorders.Push.Window;
 using SFML.Window;
 
 var displayContextManager = new DisplayContextManager();

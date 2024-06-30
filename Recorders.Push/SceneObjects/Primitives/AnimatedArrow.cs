@@ -3,7 +3,7 @@ using Recorders.Push.Window;
 using SFML.Graphics;
 using SFML.System;
 
-namespace Recorders.Push.SceneObjects;
+namespace Recorders.Push.SceneObjects.Primitives;
 
 enum Fade
 {
@@ -50,4 +50,6 @@ class AnimatedArrow: ConvexShape, IDrawableAnimation
     }
 
     public bool Done => _done;
+    public event Action? Start;
+    public event Action? Finish;
 }

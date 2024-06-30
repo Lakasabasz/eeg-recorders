@@ -4,7 +4,7 @@ using SFML.System;
 
 namespace Recorders.Push.SceneObjects;
 
-class AnimatedCube: RectangleShape, IAnimatable
+class AnimatedCube: RectangleShape, IDrawableAnimation
 {
     private readonly Vector2f _direction;
     private readonly float _velocity;

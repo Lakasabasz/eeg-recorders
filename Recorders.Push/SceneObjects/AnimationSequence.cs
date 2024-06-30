@@ -10,13 +10,7 @@ enum Direction
 
 class AnimationSequence: IAnimatable
 {
-    private Dictionary<Direction, AnimatedCube> _cubes = new()
-    {
-        [Direction.Bottom] = new AnimatedCube(new Vector2f(0, 1), 80, TimeSpan.FromSeconds(3)),
-        [Direction.Top] = new AnimatedCube(new Vector2f(0, -1), 80, TimeSpan.FromSeconds(3)),
-        [Direction.Left] = new AnimatedCube(new Vector2f(-1, 0), 80, TimeSpan.FromSeconds(3)),
-        [Direction.Right] = new AnimatedCube(new Vector2f(1, 0), 80, TimeSpan.FromSeconds(3))
-    };
+    private readonly Dictionary<Direction, CubeAnimationSequence> _cubes;
 
     private List<Direction> _sequence = ResetSequence();
 
@@ -24,9 +18,16 @@ class AnimationSequence: IAnimatable
 
     public AnimationSequence(MainWindow window)
     {
+        _cubes = new()
+        {
+            [Direction.Bottom] = new CubeAnimationSequence(window, new Vector2f(0, 1), false),
+            [Direction.Top] = new CubeAnimationSequence(window, new Vector2f(0, -1), false),
+            [Direction.Left] = new CubeAnimationSequence(window, new Vector2f(-1, 0), false),
+            [Direction.Right] = new CubeAnimationSequence(window, new Vector2f(1, 0), false)
+        };
+        
         _current = _sequence.First();
-        foreach (var (_, cube) in _cubes) cube.Position = (Vector2f)(window.Size / 2);
-        window.AddDrawable(_cubes[_current]);
+        _cubes[_current].Draw(window);
     }
 
     private static List<Direction> ResetSequence()
@@ -42,8 +43,10 @@ class AnimationSequence: IAnimatable
         int index = _sequence.IndexOf(_current);
         if (index >= 3) return;
         index++;
-        window.RemoveDrawable(_cubes[_current]);
+        _cubes[_current].Remove(window);
         _current = _sequence[index];
-        window.AddDrawable(_cubes[_current]);
+        _cubes[_current].Draw(window);
     }
+
+    public bool Done => _sequence.IndexOf(_current) == 3 && _cubes[_current].Done;
 }

@@ -2,7 +2,7 @@
 
 namespace Recorders.Push.EventHandlers;
 
-class MainWindowEventHandler
+class MainWindowEventHandler: IEventHandler<RenderWindow>
 {
     public void Register(RenderWindow window)
     {

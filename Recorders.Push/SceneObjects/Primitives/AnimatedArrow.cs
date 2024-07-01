@@ -5,11 +5,6 @@ using SFML.System;
 
 namespace Recorders.Push.SceneObjects.Primitives;
 
-enum Fade
-{
-    In, Out
-}
-
 class AnimatedArrow: ConvexShape, IDrawableAnimation
 {
     private readonly Fade _fade;

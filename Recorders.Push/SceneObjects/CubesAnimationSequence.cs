@@ -9,22 +9,22 @@ enum Direction
     Top, Left, Bottom, Right
 }
 
-class AnimationSequence: IAnimatable
+class CubesAnimationSequence: IAnimatable
 {
-    private readonly Dictionary<Direction, CubeAnimationSequence> _cubes;
+    private readonly Dictionary<Direction, SingleCubeAnimationSequence> _cubes;
 
     private List<Direction> _sequence = ResetSequence();
 
     private Direction _current;
 
-    public AnimationSequence(MainWindow window)
+    public CubesAnimationSequence(MainWindow window)
     {
         _cubes = new()
         {
-            [Direction.Bottom] = new CubeAnimationSequence(window, new Vector2f(0, 1), false, new CubeAnimationSequenceEventHandler(ApiClient.Instance, "push-bottom")),
-            [Direction.Top] = new CubeAnimationSequence(window, new Vector2f(0, -1), false, new CubeAnimationSequenceEventHandler(ApiClient.Instance, "push-top")),
-            [Direction.Left] = new CubeAnimationSequence(window, new Vector2f(-1, 0), false, new CubeAnimationSequenceEventHandler(ApiClient.Instance, "push-left")),
-            [Direction.Right] = new CubeAnimationSequence(window, new Vector2f(1, 0), false, new CubeAnimationSequenceEventHandler(ApiClient.Instance, "push-right"))
+            [Direction.Bottom] = new SingleCubeAnimationSequence(window, new Vector2f(0, 1), false, new CubeAnimationSequenceEventHandler(ApiClient.Instance, "push-bottom")),
+            [Direction.Top] = new SingleCubeAnimationSequence(window, new Vector2f(0, -1), false, new CubeAnimationSequenceEventHandler(ApiClient.Instance, "push-top")),
+            [Direction.Left] = new SingleCubeAnimationSequence(window, new Vector2f(-1, 0), false, new CubeAnimationSequenceEventHandler(ApiClient.Instance, "push-left")),
+            [Direction.Right] = new SingleCubeAnimationSequence(window, new Vector2f(1, 0), false, new CubeAnimationSequenceEventHandler(ApiClient.Instance, "push-right"))
         };
         
         _current = _sequence.First();
@@ -39,6 +39,7 @@ class AnimationSequence: IAnimatable
 
     public void UpdateAnimation(MainWindow window, float deltaTime)
     {
+        if (!GlobalData.ApiOnline) return;
         _cubes[_current].UpdateAnimation(window, deltaTime);
         if (!_cubes[_current].Done) return;
         int index = _sequence.IndexOf(_current);
@@ -48,6 +49,8 @@ class AnimationSequence: IAnimatable
         _current = _sequence[index];
         _cubes[_current].Draw(window);
     }
+
+    public void ResetState() => ResetSequence();
 
     public bool Done => _sequence.IndexOf(_current) == 3 && _cubes[_current].Done;
     public event Action? Start;

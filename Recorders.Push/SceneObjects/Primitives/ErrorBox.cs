@@ -25,7 +25,7 @@ class ErrorBox: IDrawableAnimation
             OutlineThickness = 2,
             Position = (Vector2f)(window.Size/2)
         };
-        _text = new Text(message, new Font("arial.ttf"), 32)
+        _text = new Text(message, new Font("assets/fonts/arial.ttf"), 32)
         {
             FillColor = Color.Black,
         };
@@ -47,14 +47,15 @@ class ErrorBox: IDrawableAnimation
         _alreadyDone += TimeSpan.FromSeconds(deltaTime);
 
         var percentDone = _alreadyDone > _duration ? 1.0 : _alreadyDone / _duration;
-        _background.FillColor = _background.FillColor with
-        {
-            A = (byte)(_fade == Fade.In ? 255 * percentDone : 255 * (1 - percentDone))
-        };
-        _text.FillColor = _text.FillColor with
-        {
-            A = (byte)(_fade == Fade.In ? 255 * percentDone : 255 * (1 - percentDone))
-        };
+        var alpha = (byte)(_fade == Fade.In ? 255 * percentDone : 255 * (1 - percentDone));
+        _background.FillColor = _background.FillColor with { A = alpha };
+        _text.FillColor = _text.FillColor with { A = alpha };
+    }
+
+    public void ResetState()
+    {
+        _alreadyDone = TimeSpan.Zero;
+        _done = false;
     }
 
     public bool Done

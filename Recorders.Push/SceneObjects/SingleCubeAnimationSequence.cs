@@ -5,13 +5,13 @@ using SFML.System;
 
 namespace Recorders.Push.SceneObjects;
 
-class CubeAnimationSequence: IAnimatable
+class SingleCubeAnimationSequence: IAnimatable
 {
     private readonly List<IDrawableAnimation> _sequence;
     private IDrawableAnimation _current;
     private bool _started;
 
-    public CubeAnimationSequence(MainWindow window, Vector2f direction, bool draw = true, IEventHandler<IAnimatable>? eventHandler = null)
+    public SingleCubeAnimationSequence(MainWindow window, Vector2f direction, bool draw = true, IEventHandler<IAnimatable>? eventHandler = null)
     {
         _sequence =
         [
@@ -53,6 +53,8 @@ class CubeAnimationSequence: IAnimatable
         _current = _sequence[index];
         window.AddDrawable(_current);
     }
+
+    public void ResetState(){}
 
     public bool Done => _sequence.IndexOf(_current) == _sequence.Count - 1 && _current.Done;
     public event Action? Start;

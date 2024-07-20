@@ -44,6 +44,8 @@ class AnimatedArrow: ConvexShape, IDrawableAnimation
         };
     }
 
+    public void ResetState(){}
+
     public bool Done => _done;
     public event Action? Start;
     public event Action? Finish;

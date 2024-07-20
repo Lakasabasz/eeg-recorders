@@ -9,7 +9,7 @@ namespace Recorders.Push.Window;
 class MainWindow
 {
     private readonly RenderWindow _window;
-    private readonly List<Drawable> _drawables = [];
+    private readonly Dictionary<Drawable, int> _drawables = [];
     private readonly DisplayContextManager _manager;
     private TimeSpan _fpsTargetTime;
 
@@ -23,7 +23,7 @@ class MainWindow
 
     public Vector2u Size => _window.Size;
 
-    public void AddDrawable(Drawable drawable) => _drawables.Add(drawable);
+    public void AddDrawable(Drawable drawable, int index = 100) => _drawables.Add(drawable, index);
     public void RemoveDrawable(Drawable drawable) => _drawables.Remove(drawable);
 
     public void Run()
@@ -37,7 +37,12 @@ class MainWindow
             _window.DispatchEvents();
             _manager.LoopTick((float)contextStopwatch.Elapsed.TotalSeconds);
             contextStopwatch.Restart();
-            foreach (var drawable in _drawables) _window.Draw(drawable);
+            foreach (var drawable in _drawables
+                         .Select(x => (x.Key, x.Value))
+                         .OrderBy(x => x.Value)
+                         .Select(x => x.Key)
+                     )
+                _window.Draw(drawable);
 
             _window.Display();
             var progress = fpsStopwatch.Elapsed;

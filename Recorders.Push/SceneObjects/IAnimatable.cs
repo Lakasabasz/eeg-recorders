@@ -5,6 +5,7 @@ namespace Recorders.Push.SceneObjects;
 interface IAnimatable
 {
     public void UpdateAnimation(MainWindow window, float deltaTime);
+    public void ResetState();
     public bool Done { get; }
 
     public event Action Start;

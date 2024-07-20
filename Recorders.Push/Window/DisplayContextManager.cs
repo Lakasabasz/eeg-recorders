@@ -32,6 +32,7 @@ class DisplayContextManager
         _window = window;
         InitBackground();
         //InitArrow();
+        InitErrorBox();
         InitCubeSequence();
         //InitCubeAnimationSequence();
     }
@@ -79,13 +80,19 @@ class DisplayContextManager
 
     private void InitCubeAnimationSequence()
     {
-        var animationSequence = new CubeAnimationSequence(_window!, new Vector2f(1, 0));
+        var animationSequence = new SingleCubeAnimationSequence(_window!, new Vector2f(1, 0));
         _animatables.Add(animationSequence);
     }
 
     private void InitCubeSequence()
     {
-        var sequence = new AnimationSequence(_window!);
+        var sequence = new CubesAnimationSequence(_window!);
+        _animatables.Add(sequence);
+    }
+
+    private void InitErrorBox()
+    {
+        var sequence = new ErrorBoxController(_window!);
         _animatables.Add(sequence);
     }
 }

@@ -12,4 +12,14 @@
       <PackageReference Include="SFML.Net" Version="2.6.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="assets\fonts\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="assets\fonts\arial.ttf">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

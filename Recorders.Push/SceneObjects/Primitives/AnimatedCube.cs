@@ -24,6 +24,8 @@ class AnimatedCube: RectangleShape, IDrawableAnimation
         eventHandler?.Register(this);
     }
 
+    public void ResetState(){}
+
     public bool Done
     {
         get => _done;

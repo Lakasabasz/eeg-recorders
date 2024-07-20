@@ -32,7 +32,7 @@ class AnimatedArrow: ConvexShape, IDrawableAnimation
     
     public void UpdateAnimation(MainWindow window, float deltaTime)
     {
-        if (_done) return;
+        if (Done) return;
         
         if (_alreadyDone + TimeSpan.FromSeconds(deltaTime) > _duration) _done = true;
         _alreadyDone += TimeSpan.FromSeconds(deltaTime);
@@ -44,7 +44,13 @@ class AnimatedArrow: ConvexShape, IDrawableAnimation
         };
     }
 
-    public void ResetState(){}
+    public void ResetState()
+    {
+        if(Done && _alreadyDone > TimeSpan.Zero) Finish?.Invoke();
+        _done = false;
+        _alreadyDone = TimeSpan.Zero;
+        FillColor = FillColor with { A = (byte)(_fade == Fade.In ? 0 : 255)};
+    }
 
     public bool Done => _done;
     public event Action? Start;

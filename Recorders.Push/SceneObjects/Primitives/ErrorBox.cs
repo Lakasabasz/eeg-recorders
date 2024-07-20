@@ -54,6 +54,7 @@ class ErrorBox: IDrawableAnimation
 
     public void ResetState()
     {
+        if(_alreadyDone > TimeSpan.Zero && !Done) Finish?.Invoke();
         _alreadyDone = TimeSpan.Zero;
         _done = false;
     }
@@ -75,5 +76,15 @@ class ErrorBox: IDrawableAnimation
     {
         _background.Draw(target, states);
         _text.Draw(target, states);
+    }
+
+    public Vector2f Position
+    {
+        get => _background.Position;
+        set
+        {
+            _background.Position = value;
+            _text.Position = value;
+        }
     }
 }

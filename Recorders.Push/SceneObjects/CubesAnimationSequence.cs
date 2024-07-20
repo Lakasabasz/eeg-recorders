@@ -17,14 +17,17 @@ class CubesAnimationSequence: IAnimatable
 
     private Direction _current;
 
+    private readonly MainWindow _window;
+
     public CubesAnimationSequence(MainWindow window)
     {
+        _window = window;
         _cubes = new()
         {
-            [Direction.Bottom] = new SingleCubeAnimationSequence(window, new Vector2f(0, 1), false, new CubeAnimationSequenceEventHandler(ApiClient.Instance, "push-bottom")),
-            [Direction.Top] = new SingleCubeAnimationSequence(window, new Vector2f(0, -1), false, new CubeAnimationSequenceEventHandler(ApiClient.Instance, "push-top")),
-            [Direction.Left] = new SingleCubeAnimationSequence(window, new Vector2f(-1, 0), false, new CubeAnimationSequenceEventHandler(ApiClient.Instance, "push-left")),
-            [Direction.Right] = new SingleCubeAnimationSequence(window, new Vector2f(1, 0), false, new CubeAnimationSequenceEventHandler(ApiClient.Instance, "push-right"))
+            [Direction.Bottom] = new SingleCubeAnimationSequence(window, new Vector2f(0, 1), false, new SingleCubeAnimationSequenceEventHandler(ApiClient.Instance, "push-bottom")),
+            [Direction.Top] = new SingleCubeAnimationSequence(window, new Vector2f(0, -1), false, new SingleCubeAnimationSequenceEventHandler(ApiClient.Instance, "push-top")),
+            [Direction.Left] = new SingleCubeAnimationSequence(window, new Vector2f(-1, 0), false, new SingleCubeAnimationSequenceEventHandler(ApiClient.Instance, "push-left")),
+            [Direction.Right] = new SingleCubeAnimationSequence(window, new Vector2f(1, 0), false, new SingleCubeAnimationSequenceEventHandler(ApiClient.Instance, "push-right"))
         };
         
         _current = _sequence.First();
@@ -50,7 +53,13 @@ class CubesAnimationSequence: IAnimatable
         _cubes[_current].Draw(window);
     }
 
-    public void ResetState() => ResetSequence();
+    public void ResetState()
+    {
+        foreach (var cube in _cubes.Values) cube.ResetState();
+        _sequence = ResetSequence();
+        _current = _sequence.First();
+        _cubes[_current].Draw(_window);
+    }
 
     public bool Done => _sequence.IndexOf(_current) == 3 && _cubes[_current].Done;
     public event Action? Start;

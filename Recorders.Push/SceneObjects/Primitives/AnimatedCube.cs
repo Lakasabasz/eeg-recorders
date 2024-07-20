@@ -24,7 +24,13 @@ class AnimatedCube: RectangleShape, IDrawableAnimation
         eventHandler?.Register(this);
     }
 
-    public void ResetState(){}
+    public void ResetState()
+    {
+        if(_alreadyDone > TimeSpan.Zero && !Done) Finish?.Invoke();
+        _alreadyDone = TimeSpan.Zero;
+        _done = false;
+        Position = new Vector2f(0, 0);
+    }
 
     public bool Done
     {

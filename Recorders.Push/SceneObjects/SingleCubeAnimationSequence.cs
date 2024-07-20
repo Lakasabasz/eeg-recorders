@@ -10,9 +10,14 @@ class SingleCubeAnimationSequence: IAnimatable
     private readonly List<IDrawableAnimation> _sequence;
     private IDrawableAnimation _current;
     private bool _started;
-
-    public SingleCubeAnimationSequence(MainWindow window, Vector2f direction, bool draw = true, IEventHandler<IAnimatable>? eventHandler = null)
+    private readonly MainWindow _window;
+    private bool _draw;
+    
+    public SingleCubeAnimationSequence(MainWindow window, Vector2f direction, bool draw = true,
+        IEventHandler<IAnimatable>? eventHandler = null)
     {
+        _window = window;
+        _draw = draw;
         _sequence =
         [
             new AnimatedArrow(direction, Fade.In, TimeSpan.FromSeconds(1))
@@ -54,7 +59,19 @@ class SingleCubeAnimationSequence: IAnimatable
         window.AddDrawable(_current);
     }
 
-    public void ResetState(){}
+    public void ResetState()
+    {
+        if(_started && !Done) Finish?.Invoke();
+        foreach (var sequenceElement in _sequence)
+        {
+            sequenceElement.ResetState();
+            sequenceElement.Position = (Vector2f)(_window.Size / 2);
+        }
+        _window.RemoveDrawable(_current);
+        _current = _sequence[0];
+        _started = false;
+        if(_draw)_window.AddDrawable(_current);
+    }
 
     public bool Done => _sequence.IndexOf(_current) == _sequence.Count - 1 && _current.Done;
     public event Action? Start;

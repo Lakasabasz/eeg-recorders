@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Recorders.Push.EventDispatcher;
 using Recorders.Push.EventHandlers;
 using SFML.Graphics;
 using SFML.System;
@@ -13,10 +14,12 @@ class MainWindow
     private readonly DisplayContextManager _manager;
     private TimeSpan _fpsTargetTime;
 
-    public MainWindow(VideoMode size, MainWindowEventHandler eventHandler, DisplayContextManager manager)
+    public MainWindow(VideoMode size, MainWindowEventHandler eventHandler, DisplayContextManager manager,
+        IEventDispatcher<RenderWindow, DisplayContextManager>? eventDispatcher = null)
     {
         _window = new(size, "Push recorder", Styles.Default, new ContextSettings(){AntialiasingLevel = 3});
         eventHandler.Register(_window);
+        eventDispatcher?.SetUp(_window, manager);
         _fpsTargetTime = TimeSpan.FromSeconds(1) / 60.0;
         _manager = manager;
     }

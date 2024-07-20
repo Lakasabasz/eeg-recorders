@@ -2,14 +2,14 @@
 
 namespace Recorders.Push.EventHandlers;
 
-class CubeAnimationSequenceEventHandler(ApiClient client, string label): IEventHandler<IAnimatable>
+class SingleCubeAnimationSequenceEventHandler(ApiClient client, string label): IEventHandler<IAnimatable>
 {
     public void Register(IAnimatable eventContainer)
     {
-        eventContainer.Start += CubeAnimationSequenceOnStart;
+        eventContainer.Start += SingleCubeAnimationSequenceOnStart;
     }
 
-    private void CubeAnimationSequenceOnStart()
+    private void SingleCubeAnimationSequenceOnStart()
     {
         var resp = client.SetLabel(label);
         if(resp is not null) Console.WriteLine($"Recording starting error: {resp.Message}");
